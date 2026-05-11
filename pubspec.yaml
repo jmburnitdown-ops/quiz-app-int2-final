@@ -1,7 +1,7 @@
 name: quiz_app
 description: "A new Flutter project for Integrative Programming 2 Final."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -18,15 +18,35 @@ dependencies:
   cached_network_image: ^3.3.1
   path_provider: ^2.1.2
   google_fonts: ^6.2.1
-  
-  # BETTER ALTERNATIVE: Fast, code-based animations
+  audioplayers: ^6.0.0 # Required for Sound
   confetti: ^0.7.0 
+  pdf: ^3.12.0
+  printing: ^5.13.2
 
 dev_dependencies:
+  test: ^1.30.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
-  # Note: Assets section removed to fix the "directory not found" error
+
+  # Registering the sound assets
+  assets:
+    - assets/sounds/success.mp3
+    - assets/sounds/error.mp3
+    - assets/images/html_template.png
+    - assets/images/quiz_app_logo.png
+    - assets/images/css_template.png
+    - assets/images/cplusplus_template.png
+    - assets/images/javascript_template.png
+    - assets/images/flutter_template.png
+    - assets/images/dart_template.png
+    - assets/images/python_template.png
+    - assets/images/swift_template.png
+    - assets/images/react_template.png
+    - assets/images/angular_template.png
+
+
+    

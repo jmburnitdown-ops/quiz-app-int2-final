@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../theme/app_colors.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -10,14 +11,26 @@ class StatsScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Performance Analytics'), 
-        backgroundColor: Colors.blue[700], 
+        backgroundColor: AppColors.purple, 
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: StreamBuilder<DocumentSnapshot>(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.purple,
+              AppColors.purpleLight,
+              AppColors.yellow,
+            ],
+          ),
+        ),
+        child: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
@@ -44,7 +57,7 @@ class StatsScreen extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
-                    BoxShadow(color: Colors.blueGrey.withOpacity(0.1), blurRadius: 15, offset: const Offset(0, 8))
+                    BoxShadow(color: AppColors.purple.withValues(alpha: 0.1), blurRadius: 15, offset: const Offset(0, 8))
                   ],
                 ),
                 child: Column(
@@ -55,7 +68,7 @@ class StatsScreen extends StatelessWidget {
                         Text(category, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         Text(
                           "${(percent * 100).toInt()}%", 
-                          style: TextStyle(color: percent > 0.7 ? Colors.green : Colors.orange, fontWeight: FontWeight.bold)
+                          style: TextStyle(color: percent > 0.7 ? AppColors.cyan : AppColors.yellow, fontWeight: FontWeight.bold)
                         ),
                       ],
                     ),
@@ -66,7 +79,7 @@ class StatsScreen extends StatelessWidget {
                         value: percent,
                         minHeight: 10,
                         backgroundColor: Colors.grey[200],
-                        color: percent > 0.7 ? Colors.green : Colors.orange,
+                        color: percent > 0.7 ? AppColors.cyan : AppColors.yellow,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -80,6 +93,7 @@ class StatsScreen extends StatelessWidget {
             },
           );
         },
+        ),
       ),
     );
   }

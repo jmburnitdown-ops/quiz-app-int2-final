@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -17,7 +18,11 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('About Group Members'), backgroundColor: Colors.blue),
+      appBar: AppBar(
+        title: const Text('About Group Members'),
+        backgroundColor: AppColors.purple,
+        foregroundColor: Colors.white,
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: members.length,
