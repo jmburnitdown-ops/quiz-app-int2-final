@@ -10,6 +10,7 @@ class QuizProvider with ChangeNotifier {
   String _selectedCategory = '';
   static const int pointsPerCorrectAnswer = 10;
 
+  // Getters
   String get selectedCategory => _selectedCategory;
   int get score => _score;
   int get currentIndex => _currentIndex;
@@ -192,7 +193,15 @@ class QuizProvider with ChangeNotifier {
 
   void selectCategory(String category) {
     _selectedCategory = category;
-    resetQuiz();
+    resetQuiz(); // This will now work
+    notifyListeners();
+  }
+
+  // FIX: Added the missing resetQuiz method
+  void resetQuiz() {
+    _currentIndex = 0;
+    _score = 0;
+    _isFinished = false;
     notifyListeners();
   }
 
@@ -200,7 +209,7 @@ class QuizProvider with ChangeNotifier {
     if (selectedIndex == currentQuestion.correctAnswerIndex) {
       _score += pointsPerCorrectAnswer;
     }
-
+    
     if (_currentIndex < _questions[_selectedCategory]!.length - 1) {
       _currentIndex++;
     } else {
@@ -214,22 +223,20 @@ class QuizProvider with ChangeNotifier {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'all_scores': {
+            _selectedCategory: {
+              'score': _score,
+              'total': totalQuestions * pointsPerCorrectAnswer,
+              'timestamp': FieldValue.serverTimestamp(),
+            }
+          },
           'lastQuizCategory': _selectedCategory,
           'lastQuizScore': _score,
-          'lastQuizTotal': totalQuestions * pointsPerCorrectAnswer,
-          'completedAt': FieldValue.serverTimestamp(),
-        });
+        }, SetOptions(merge: true));
       } catch (e) {
-        debugPrint("Error saving quiz results: $e");
+        debugPrint("Error saving results: $e");
       }
     }
-  }
-
-  void resetQuiz() {
-    _currentIndex = 0;
-    _score = 0;
-    _isFinished = false;
-    notifyListeners();
   }
 }

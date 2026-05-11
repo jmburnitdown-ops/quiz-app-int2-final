@@ -6,57 +6,189 @@ import 'login_screen.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  // Method to show the About Dialog with the developer list
+  void _showAboutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.blue),
+            SizedBox(width: 10),
+            Text("About Developers"),
+          ],
+        ),
+        content: const SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Developed by:", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              SizedBox(height: 10),
+              Text("• GEAH NICHOLE BENOSA"),
+              Text("• HEART WENNROSE MANGABLE"),
+              Text("• ROWEZA CLATA"),
+              Text("• MARIEL MARAVILLA"),
+              Text("• TRIXIE ANN MONTAñO"),
+              Text("• LYCHELLE MARTINEZ"),
+              Text("• MAKC LOZANES"),
+              Text("• JOHN MARK BANGUD"),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Student Profile')),
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: const Text('Student Profile'),
+        backgroundColor: Colors.blue[700],
+        foregroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          // RE-ADDED: About Icon
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => _showAboutDialog(context),
+          ),
+        ],
+      ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('users').doc(user?.uid).get(), // [cite: 291]
+        future: FirebaseFirestore.instance.collection('users').doc(user?.uid).get(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-          if (!snapshot.hasData || !snapshot.data!.exists) return const Center(child: Text("No profile data found."));
-
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          
           var data = snapshot.data!.data() as Map<String, dynamic>;
 
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
+          return SingleChildScrollView(
             child: Column(
               children: [
-                const CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
-                const SizedBox(height: 20),
-                ListTile(title: const Text("Full Name"), subtitle: Text("${data['firstName']} ${data['lastName']}"), leading: const Icon(Icons.badge)), // [cite: 308, 309]
-                ListTile(title: const Text("School ID"), subtitle: Text(data['schoolId'] ?? "N/A"), leading: const Icon(Icons.school)), // [cite: 313, 314]
-                ListTile(title: const Text("Email"), subtitle: Text(data['email'] ?? "N/A"), leading: const Icon(Icons.email)), // [cite: 318, 319]
-                const Divider(height: 40),
-                const Text("Latest Quiz Performance", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), // [cite: 326, 327]
-                const SizedBox(height: 10),
-                ListTile(
-                  title: const Text("Category"),
-                  subtitle: Text(data['lastQuizCategory'] ?? "No quiz taken yet"),
-                  leading: const Icon(Icons.category, color: Colors.blue),
+                // Header Profile Section
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[700],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      const CircleAvatar(
+                        radius: 55,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, size: 60, color: Colors.blue),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "${data['firstName']} ${data['lastName']}",
+                        style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Text(data['email'] ?? '', style: const TextStyle(color: Colors.white70)),
+                    ],
+                  ),
                 ),
-                ListTile(
-                  title: const Text("Recent Score"),
-                  subtitle: Text(data['lastQuizScore'] != null ? "${data['lastQuizScore']} points" : "0 points"),
-                  leading: const Icon(Icons.emoji_events, color: Colors.amber),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 50)),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    if (context.mounted) {
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false); // [cite: 353, 355]
-                    }
-                  },
-                  child: const Text("Logout"),
+                
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      _infoCard("School ID", data['schoolId'] ?? 'N/A', Icons.badge),
+                      
+                      // Academic Info Row 1
+                      Row(
+                        children: [
+                          Expanded(child: _infoCard("Course", data['course'] ?? 'N/A', Icons.school)),
+                          const SizedBox(width: 10),
+                          Expanded(child: _infoCard("Year", data['year'] ?? 'N/A', Icons.calendar_today)),
+                        ],
+                      ),
+
+                      // Academic Info Row 2
+                      Row(
+                        children: [
+                          Expanded(child: _infoCard("Major", data['major'] ?? 'N/A', Icons.star_border)),
+                          const SizedBox(width: 10),
+                          Expanded(child: _infoCard("Section", data['section'] ?? 'N/A', Icons.group_work)),
+                        ],
+                      ),
+                      
+                      const Divider(height: 30),
+                      _infoCard("Latest Quiz", data['lastQuizCategory'] ?? 'None', Icons.history),
+
+                      const SizedBox(height: 20),
+                      
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 55),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))
+                        ),
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Navigator.pushAndRemoveUntil(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const LoginScreen()), 
+                            (route) => false
+                          );
+                        },
+                        icon: const Icon(Icons.logout),
+                        label: const Text("LOGOUT", style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+
+                      const SizedBox(height: 30),
+                      
+                      // Footer Credits
+                      const Text(
+                        "Developed by Team Integrative",
+                        style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        "BENOSA • MANGABLE • CLATA • MARAVILLA • MONTAñO • MARTINEZ • LOZANES • BANGUD",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _infoCard(String title, String value, IconData icon) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 2,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+        leading: Icon(icon, color: Colors.blue[700], size: 22),
+        title: Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        subtitle: Text(
+          value, 
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+        ),
       ),
     );
   }

@@ -1,45 +1,32 @@
 name: quiz_app
 description: "A new Flutter project for Integrative Programming 2 Final."
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.5
+  sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-
-  # CORE REQUIREMENT: State management (Week 9)
   provider: ^6.1.1 
-
-  # BONUS FEATURE: Firebase Integration (Week 10)
   firebase_core: ^3.1.1
   firebase_auth: ^5.1.1
-  # NEW: Added for storing First Name, Last Name, and School ID
   cloud_firestore: ^5.1.0 
-
-  # SECURITY GOAL 1: Encrypted storage for sensitive data (Week 8)
-  # Fulfills the requirement to protect data at rest
   flutter_secure_storage: ^9.2.2
-
-  # OPTIMIZATION: Handling URL-based images and background paths
   cached_network_image: ^3.3.1
   path_provider: ^2.1.2
+  google_fonts: ^6.2.1
+  
+  # BETTER ALTERNATIVE: Fast, code-based animations
+  confetti: ^0.7.0 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # CODE QUALITY: Crucial for the "Clean, organized Dart code" (10 pts)
   flutter_lints: ^3.0.0
 
 flutter:
-  # UI REQUIREMENT: Enables Material 3 features
   uses-material-design: true
-
-  # Ensure your assets folder exists if you uncomment this
-  # assets:
-  #   - assets/images/
+  # Note: Assets section removed to fix the "directory not found" error
