@@ -333,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                         const Text(
-                          "BENOSA • MANGABLE • CLATA • MARAVILLA • MONTAñO • MARTINEZ • LOZANES • BANGUD",
+                          "BENOSA • MANGABLE • CLATA • MARAVILLA • MONTAÑO • MARTINEZ • LOZANES • BANGUD",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 10),
                         ),

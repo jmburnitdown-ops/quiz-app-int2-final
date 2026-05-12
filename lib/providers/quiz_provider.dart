@@ -1203,12 +1203,23 @@ class QuizProvider with ChangeNotifier {
   }
 
   void answerQuestion(int selectedIndex) {
-    if (_userAnswers.length > _currentIndex) {
+    // Check if this question was already answered
+    bool hadPreviousAnswer = _userAnswers.length > _currentIndex;
+    int? previousAnswer = hadPreviousAnswer ? _userAnswers[_currentIndex] : null;
+    
+    // Update or add the answer
+    if (hadPreviousAnswer) {
       _userAnswers[_currentIndex] = selectedIndex;
+      
+      // If the previous answer was correct, subtract points
+      if (previousAnswer == currentQuestion.correctAnswerIndex) {
+        _score -= pointsPerCorrectAnswer;
+      }
     } else {
       _userAnswers.add(selectedIndex);
     }
 
+    // Add points if the new answer is correct
     if (selectedIndex == currentQuestion.correctAnswerIndex) {
       _score += pointsPerCorrectAnswer;
     }

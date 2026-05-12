@@ -47,8 +47,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
     final quiz = Provider.of<QuizProvider>(context, listen: false);
     final int total = quiz.totalQuestions * QuizProvider.pointsPerCorrectAnswer;
+    final int correctAnswers = quiz.correctAnswers;
 
     if (total == 0 || quiz.selectedCategory.isEmpty) return;
+
+    // Certificate only shown if user answered at least 12 correct answers
+    const int passingScore = 12;
+    if (correctAnswers < passingScore) return;
 
     _certificatePopupShown = true;
 

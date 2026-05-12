@@ -71,6 +71,34 @@ class ReviewScreen extends StatelessWidget {
                         ),
                         const Divider(height: 25),
                         
+                        // Status information
+                        if (userAnswer == null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.orange.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.orange.withOpacity(0.5)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.help_outline, size: 18, color: Colors.orange[700]),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Not answered',
+                                    style: TextStyle(
+                                      color: Colors.orange[700],
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        
                         // Options List
                         ...List.generate(question.options.length, (optionIndex) {
                           bool isThisCorrectOption = optionIndex == question.correctAnswerIndex;
@@ -81,48 +109,60 @@ class ReviewScreen extends StatelessWidget {
                           Color textColor = Colors.black87;
                           IconData? trailingIcon;
 
+                          // Correct answer - always green
                           if (isThisCorrectOption) {
-                            boxColor = Colors.green.withOpacity(0.1);
+                            boxColor = Colors.green.withOpacity(0.15);
                             textColor = Colors.green[700]!;
                             trailingIcon = Icons.check_circle;
-                          } else if (isThisUserChoice && !isCorrect) {
-                            boxColor = Colors.red.withOpacity(0.1);
+                          }
+                          // User's wrong choice - red
+                          else if (isThisUserChoice && !isCorrect) {
+                            boxColor = Colors.red.withOpacity(0.15);
                             textColor = Colors.red[700]!;
                             trailingIcon = Icons.cancel;
                           }
 
                           return Container(
-                            margin: const EdgeInsets.only(bottom: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                             decoration: BoxDecoration(
                               color: boxColor,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                 color: boxColor != Colors.transparent 
-                                    ? textColor.withOpacity(0.3) 
-                                    : Colors.grey[200]!
+                                    ? textColor.withOpacity(0.4) 
+                                    : Colors.grey[300]!,
+                                width: boxColor != Colors.transparent ? 1.5 : 1,
                               ),
                             ),
                             child: Row(
                               children: [
                                 Text(
                                   "${optionIndex + 1}.",
-                                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
                                     question.options[optionIndex],
                                     style: TextStyle(
                                       color: textColor,
                                       fontWeight: isThisUserChoice || isThisCorrectOption 
-                                          ? FontWeight.bold 
-                                          : FontWeight.normal
+                                          ? FontWeight.w600 
+                                          : FontWeight.normal,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
                                 if (trailingIcon != null)
-                                  Icon(trailingIcon, size: 18, color: textColor),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Icon(trailingIcon, size: 20, color: textColor),
+                                  ),
                               ],
                             ),
                           );
