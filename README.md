@@ -1,6 +1,6 @@
-# Quiz App
+# Knowledge-Quiz App
 
-Quiz App is a Flutter-based mobile quiz system for Integrative Programming. It allows students to create an account, log in, answer programming-related quizzes, view results, earn badges/certificates, and compare scores through a global leaderboard.
+Knowledge-Quiz App is a Flutter-based mobile quiz system for Integrative Programming. It allows students to create an account, log in, answer programming-related quizzes, view results, earn badges/certificates, and compare scores through a global leaderboard.
 
 ## Features
 
@@ -182,7 +182,7 @@ Current test status:
 
 ## Notes
 
-- The app name shown on Android is `Quiz App`.
+- The app name shown on Android is `Knowledge-Quiz App`.
 - The Android launcher icon has been customized.
 - Firestore user documents should remain synced with Firebase Auth accounts. If an account is deleted, its Firestore user document should also be deleted or marked inactive so it no longer appears on the leaderboard.
 - Firebase Security Rules should be reviewed before production deployment.

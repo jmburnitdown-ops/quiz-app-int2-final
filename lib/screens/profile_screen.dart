@@ -328,14 +328,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const Text(
                           "Developed by Team Integrative",
                           style: TextStyle(
-                              color: Colors.grey,
+                              color: Color.fromARGB(255, 255, 255, 255),
                               fontSize: 12,
                               fontWeight: FontWeight.bold),
                         ),
                         const Text(
                           "BENOSA • MANGABLE • CLATA • MARAVILLA • MONTAÑO • MARTINEZ • LOZANES • BANGUD",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 10),
                         ),
                         const SizedBox(height: 20),
                       ],

@@ -168,7 +168,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(_isSignUp ? "Register" : "Login"),
                         ),
                       TextButton(
-                        onPressed: () => setState(() => _isSignUp = !_isSignUp),
+                        onPressed: () {
+                          _formKey.currentState?.reset();
+                          _emailController.clear();
+                          _passwordController.clear();
+                          _firstNameController.clear();
+                          _lastNameController.clear();
+                          _schoolIdController.clear();
+                          _courseController.clear();
+                          _yearController.clear();
+                          _majorController.clear();
+                          _sectionController.clear();
+                          setState(() => _isSignUp = !_isSignUp);
+                        },
                         child: Text(_isSignUp
                             ? "Already have an account? Login"
                             : "New user? Create Account"),
